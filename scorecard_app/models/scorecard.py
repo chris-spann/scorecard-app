@@ -2,24 +2,24 @@ from typing import List
 
 import click
 import pandas as pd
-from models.round import Round
-from pydantic import BaseModel, validator
+from models import Boxer, Round
+from pydantic import BaseModel, field_validator
 from tabulate import tabulate
 
 
 class ScorecardBase(BaseModel):
-    b1: str
-    b2: str
+    b1: Boxer
+    b2: Boxer
     rounds: int
     scores: List[Round] = []
 
-    @validator("rounds")
+    @field_validator("rounds")
     def validate_fight_length(cls, v):
         if v not in list(range(3, 13)):
             return 12
         return v
 
-    @validator("scores", always=True)
+    @field_validator("scores")
     def populate_scores(cls, v, values):
         res = []
         for i in range(values["rounds"]):
@@ -55,7 +55,7 @@ class ScorecardCli(ScorecardBase):
         dfs = []
         for score in self.scores:
             df = pd.DataFrame(
-                {self.b1: score.b1_score, self.b2: score.b2_score}, index=[score.round]
+                {self.b1.name: score.b1_score, self.b2.name: score.b2_score}, index=[score.round]
             )
             dfs.append(df)
         combined_df = pd.concat(dfs)
@@ -66,7 +66,7 @@ class ScorecardCli(ScorecardBase):
         df = self.get_df()
         result = tabulate(
             df.reset_index().values.tolist(),
-            headers=["Round", self.b1, self.b2],
+            headers=["Round", self.b1.name, self.b2.name],
             tablefmt="pretty",
         )
         return result
@@ -76,9 +76,9 @@ class ScorecardCli(ScorecardBase):
         result_msg = "And we go to the cards...The winner is "
         df = self.get_df()
         b1, b2 = self.b1, self.b2
-        if df[b1]["Total"] > df[b2]["Total"]:
-            winner = b1
-        if df[b1]["Total"] < df[b2]["Total"]:
-            winner = b2
+        if df[b1.name]["Total"] > df[b2.name]["Total"]:
+            winner = b1.name
+        if df[b1.name]["Total"] < df[b2.name]["Total"]:
+            winner = b2.name
         result_msg += winner + "."
         return winner, result_msg

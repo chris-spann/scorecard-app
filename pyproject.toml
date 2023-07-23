@@ -27,7 +27,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.coverage.run]
-omit = ["/tests/*"]
+omit = ["*/tests/*", "*/__init__.py"]
 
 [tool.pytest.ini_options]
 addopts = "-ra -q -v --cov=. --cov-report term-missing"
@@ -35,3 +35,6 @@ pythonpath = "scorecard_app"
 
 [tool.ruff]
 line-length=100
+
+[tool.ruff.extend-per-file-ignores]
+"__init__.py" = ["F401"]

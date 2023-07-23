@@ -1,8 +1,7 @@
 from time import sleep
 
 import click
-from models.round import Round
-from models.scorecard import ScorecardCli
+from models import Round, ScorecardCli
 
 
 def fight_sequence(scorecard: ScorecardCli):

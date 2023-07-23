@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 
 class Round(BaseModel):
@@ -9,13 +9,13 @@ class Round(BaseModel):
     b2_score: int = 0
     note: Optional[str] = ""
 
-    @validator("b1_score", "b2_score")
+    @field_validator("b1_score", "b2_score")
     def validate_scoring(cls, v):
         if v not in list(range(0, 11)):
             raise ValueError("Invalid Score: Score must be an integer 1-10")
         return v
 
-    @validator("round")
+    @field_validator("round")
     def validate_round_number(cls, v):
         if v not in list(range(1, 13)):
             raise ValueError("Invalid Round: Round must be integer 1-12")
