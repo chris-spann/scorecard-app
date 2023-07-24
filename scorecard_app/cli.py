@@ -2,6 +2,7 @@ from time import sleep
 
 import click
 from models import Round, ScorecardCli
+from models.boxer import Boxer
 
 
 def fight_sequence(scorecard: ScorecardCli):
@@ -53,12 +54,12 @@ def fight_sequence(scorecard: ScorecardCli):
 
 
 def get_boxer_info() -> ScorecardCli:
-    boxer_1 = click.prompt("Who is fighting?", type=str, default="Evander Holyfield")
-    boxer_2 = click.prompt(boxer_1 + " vs ?", type=str, default="Mike Tyson")
+    b1 = Boxer(name=click.prompt("Who is fighting?", type=str, default="Evander Holyfield"))
+    b2 = Boxer(name=click.prompt(b1.name + " vs ?", type=str, default="Mike Tyson"))
     rounds = click.prompt("How many rounds?", type=int, default=12)
     click.echo("\n")
     sleep(1)
-    return ScorecardCli(b1=boxer_1, b2=boxer_2, rounds=rounds)
+    return ScorecardCli(b1=b1, b2=b2, rounds=rounds)
 
 
 @click.command()

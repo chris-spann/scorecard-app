@@ -3,7 +3,7 @@ from typing import List
 import click
 import pandas as pd
 from models import Boxer, Round
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, model_validator
 from tabulate import tabulate
 
 
@@ -13,18 +13,19 @@ class ScorecardBase(BaseModel):
     rounds: int
     scores: List[Round] = []
 
+    @model_validator(mode="after")
+    def populate_scores(self):
+        self.scores = []
+        for i in range(self.rounds):
+            self.scores.append(Round(round=i + 1))
+        return self
+
     @field_validator("rounds")
+    @classmethod
     def validate_fight_length(cls, v):
         if v not in list(range(3, 13)):
             return 12
         return v
-
-    @field_validator("scores")
-    def populate_scores(cls, v, values):
-        res = []
-        for i in range(values["rounds"]):
-            res.append(Round(round=i + 1))
-        return res
 
 
 class ScorecardCli(ScorecardBase):

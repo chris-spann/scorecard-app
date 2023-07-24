@@ -10,12 +10,14 @@ class Round(BaseModel):
     note: Optional[str] = ""
 
     @field_validator("b1_score", "b2_score")
+    @classmethod
     def validate_scoring(cls, v):
         if v not in list(range(0, 11)):
             raise ValueError("Invalid Score: Score must be an integer 1-10")
         return v
 
     @field_validator("round")
+    @classmethod
     def validate_round_number(cls, v):
         if v not in list(range(1, 13)):
             raise ValueError("Invalid Round: Round must be integer 1-12")
