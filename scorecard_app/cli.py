@@ -5,6 +5,10 @@ from models import Round, ScorecardCli
 from models.boxer import Boxer
 
 
+def ko():
+    pass
+
+
 def fight_sequence(scorecard: ScorecardCli):
     click.clear()
     click.echo("LET'S GET READY TO RUMBLE!!!")
@@ -19,18 +23,32 @@ def fight_sequence(scorecard: ScorecardCli):
         sleep(1)
         click.echo(scorecard.show_scorecard())
         click.echo("\n")
-        b1_score = click.prompt(
-            f"Score for {scorecard.b1}?", default=10, type=click.IntRange(0, 10), err=True
-        )
-        b2_score = click.prompt(
-            f"Score for {scorecard.b2}?", default=10, type=click.IntRange(0, 10), err=True
-        )
+        click.echo("Enter 11 if boxer has earned a stoppage.")
+        round_scores = []
+        for boxer in [scorecard.b1, scorecard.b2]:
+            score = click.prompt(f"Score for {boxer}", type=click.IntRange(0, 11), err=True)
+            click.echo("\n")
+            if score == 11:
+                click.echo(f"{boxer} has earned a stoppage.")
+                sleep(1)
+                click.echo("\n")
+                click.echo("The fight is over.")
+                sleep(1)
+                click.echo("\n")
+                click.echo(f"{boxer} wins by KO/TKO in round {curr_round}.")
+                sleep(1)
+                click.echo("\n")
+                click.pause()
+                click.clear()
+                return
+            round_scores.append(score)
         click.echo(
-            f"Round {curr_round}: {scorecard.b1} ({b1_score}) - " f"{scorecard.b2} ({b2_score})"
+            f"Round {curr_round}: {scorecard.b1} ({round_scores[0]}) - "
+            f"{scorecard.b2} ({round_scores[1]})"
         )
 
         if click.confirm("Is this correct?"):
-            result = Round(round=curr_round, b1_score=b1_score, b2_score=b2_score)
+            result = Round(round=curr_round, b1_score=round_scores[0], b2_score=round_scores[1])
             scorecard.complete_round(result)
             curr_round += 1
             sleep(1)
@@ -54,8 +72,8 @@ def fight_sequence(scorecard: ScorecardCli):
 
 
 def get_boxer_info() -> ScorecardCli:
-    b1 = Boxer(name=click.prompt("Who is fighting?", type=str, default="Evander Holyfield"))
-    b2 = Boxer(name=click.prompt(b1.name + " vs ?", type=str, default="Mike Tyson"))
+    b1 = Boxer(name=click.prompt("Who is fighting?", type=str, default="Evander Holyfield").strip())
+    b2 = Boxer(name=click.prompt(b1.name + " vs ?", type=str, default="Mike Tyson").strip())
     rounds = click.prompt("How many rounds?", type=int, default=12)
     click.echo("\n")
     sleep(1)

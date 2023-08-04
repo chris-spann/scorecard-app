@@ -4,5 +4,5 @@ from pydantic import BaseModel
 class Boxer(BaseModel):
     name: str
 
-    def __repr__(self) -> str:
+    def __str__(self) -> str:
         return self.name
