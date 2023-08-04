@@ -23,7 +23,8 @@ def fight_sequence(scorecard: ScorecardCli):
         sleep(1)
         click.echo(scorecard.show_scorecard())
         click.echo("\n")
-        click.echo("Enter 11 if boxer has earned a stoppage.")
+        click.echo('** Enter "11" if boxer has earned a stoppage **\n')
+        sleep(1)
         round_scores = []
         for boxer in [scorecard.b1, scorecard.b2]:
             score = click.prompt(f"Score for {boxer}", type=click.IntRange(0, 11), err=True)
@@ -31,7 +32,7 @@ def fight_sequence(scorecard: ScorecardCli):
             if score == 11:
                 click.echo(f"{boxer} has earned a stoppage.")
                 sleep(1)
-                click.echo("\n")
+                click.clear()
                 click.echo("The fight is over.")
                 sleep(1)
                 click.echo("\n")

@@ -1,6 +1,5 @@
 from typing import List
 
-import click
 import pandas as pd
 from models import Boxer, Round
 from pydantic import BaseModel, field_validator, model_validator
@@ -29,6 +28,9 @@ class ScorecardBase(BaseModel):
 
 
 class ScorecardCli(ScorecardBase):
+    def __str__(self):
+        return f"{self.b1.name} vs. {self.b2.name}, {self.rounds} rounds"
+
     def reset_card(self):
         res = []
         for i in range(self.rounds):
@@ -37,13 +39,9 @@ class ScorecardCli(ScorecardBase):
         self.show_scorecard()
 
     def reset_round(self, round: int):
-        is_reset_complete = False
         for i, score in enumerate(self.scores):
             if score.round == round:
                 self.scores[i] = Round(round=round, b1_score=0, b2_score=0)
-                is_reset_complete = True
-        if not is_reset_complete:
-            click.echo("Error: Did not reset round")
         self.show_scorecard()
 
     def complete_round(self, result: Round):
@@ -83,3 +81,7 @@ class ScorecardCli(ScorecardBase):
             winner = b2.name
         result_msg += winner + "."
         return winner, result_msg
+
+
+class Scorecard(ScorecardCli):
+    pass

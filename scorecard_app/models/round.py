@@ -9,6 +9,9 @@ class Round(BaseModel):
     b2_score: int = 0
     note: Optional[str] = ""
 
+    def __str__(self):
+        return (self.b1_score, self.b2_score)
+
     @field_validator("b1_score", "b2_score")
     @classmethod
     def validate_scoring(cls, v):

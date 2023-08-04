@@ -2,6 +2,11 @@ import pytest
 from models.round import Round
 
 
+def test_round_str():
+    round = Round(round=1, b1_score=10, b2_score=9)
+    assert round.__str__() == (10, 9)
+
+
 def test_round_valid_input():
     round = Round(round=1, b1_score=10, b2_score=9)
     assert round.b1_score == 10
