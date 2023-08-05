@@ -5,10 +5,7 @@ from models import Round, ScorecardCli
 from models.boxer import Boxer
 
 
-def ko():
-    pass
-
-
+@click.command()
 def fight_sequence(scorecard: ScorecardCli):
     click.clear()
     click.echo("LET'S GET READY TO RUMBLE!!!")
@@ -91,7 +88,6 @@ def cli():
     click.echo("----")
     click.echo("\n")
     sleep(1)
-    # while not is_ready:
     scorecard = get_boxer_info()
     click.clear()
     click.echo(scorecard.show_scorecard())
