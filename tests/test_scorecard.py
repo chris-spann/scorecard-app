@@ -32,6 +32,31 @@ def test_get_winner_draw(mock_scorecard):
     assert mock_scorecard.determine_winner()[0] == "N/A"
 
 
+def test_stoppage_ending_draw(mock_scorecard):
+    mock_scorecard.complete_round(Round(round=1, b1_score=10, b2_score=10))
+    assert (
+        mock_scorecard.stoppage_ending()
+        == "At the time of the stoppage, neither boxer was ahead on the scorecards."
+    )
+
+
+def test_stoppage_ending_b1(mock_scorecard):
+    mock_scorecard.complete_round(Round(round=1, b1_score=10, b2_score=9))
+    assert (
+        mock_scorecard.stoppage_ending()
+        == "At the time of the stoppage, Muhammad Ali was ahead on the scorecards."
+    )
+
+
+def test_stoppage_ending_b2(mock_scorecard):
+    mock_scorecard.complete_round(Round(round=1, b1_score=9, b2_score=10))
+    mock_scorecard.complete_round(Round(round=2, b1_score=9, b2_score=10))
+    assert (
+        mock_scorecard.stoppage_ending()
+        == "At the time of the stoppage, Joe Frazier was ahead on the scorecards."
+    )
+
+
 def test_str(mock_scorecard):
     assert str(mock_scorecard) == "Muhammad Ali vs. Joe Frazier, 12 rounds"
 

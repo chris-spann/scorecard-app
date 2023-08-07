@@ -82,6 +82,18 @@ class ScorecardCli(ScorecardBase):
         result_msg += winner + "."
         return winner, result_msg
 
+    def stoppage_ending(self):
+        df = self.get_df()
+        b1, b2 = self.b1, self.b2
+        winner = {"name": "neither boxer"}
+        if df[b1.name]["Total"] > df[b2.name]["Total"]:
+            winner["name"] = b1.name
+            winner["score"] = df[b1.name]["Total"]
+        if df[b1.name]["Total"] < df[b2.name]["Total"]:
+            winner["name"] = b2.name
+            winner["score"] = df[b2.name]["Total"]
+        return f"At the time of the stoppage, {winner['name']} was ahead on the scorecards."
+
 
 class Scorecard(ScorecardCli):
     pass
