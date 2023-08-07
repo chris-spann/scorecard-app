@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "scorecard-app"
 version = "0.1.0"
-description = ""
+description = "A simple CLI to score boxing matches in real time."
 authors = ["Chris Spann <cspanndev@gmail.com>"]
 readme = "README.md"
 packages = [{include = "scorecard_app"}]
