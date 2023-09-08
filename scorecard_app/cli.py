@@ -19,7 +19,7 @@ def fight_sequence(scorecard: ScorecardCli):
         sleep(1)
         click.echo(scorecard.show_scorecard())
         click.echo("\n")
-        click.echo('** Enter "11" if boxer has earned a stoppage **\n')
+        click.secho(message='** Enter "11" if boxer has earned a stoppage **\n', fg="yellow")
         sleep(1)
         round_scores = []
         for boxer in [scorecard.b1, scorecard.b2]:
@@ -43,9 +43,10 @@ def fight_sequence(scorecard: ScorecardCli):
                 click.clear()
                 return
             round_scores.append(score)
-        click.echo(
-            f"Round {curr_round}: {scorecard.b1} ({round_scores[0]}) - "
-            f"{scorecard.b2} ({round_scores[1]})"
+        click.secho(
+            message=f"Round {curr_round}: {scorecard.b1} ({round_scores[0]}) - "
+            f"{scorecard.b2} ({round_scores[1]})",
+            fg="red",
         )
 
         if click.confirm("Is this correct?"):
@@ -88,17 +89,12 @@ def cli():
     sleep(1)
     click.echo("\n")
     click.secho("A simple CLI to score boxing matches in real time.", italic=True)
-    click.echo("----")
     click.echo("\n")
     sleep(1)
     scorecard = get_boxer_info()
     click.clear()
-    click.echo(scorecard.show_scorecard())
-    click.echo("\n")
-    if click.confirm("Is this correct"):
-        click.echo("Entering fight sequence.")
-        sleep(1)
-        fight_sequence(scorecard)
+    sleep(1)
+    fight_sequence(scorecard)
 
 
 if __name__ == "__main__":
